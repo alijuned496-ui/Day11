@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100d27">
+<title>Day 11 — The Anshika Quest</title>
+<style>
+:root{--bg:#0b0920;--panel:rgba(28,23,61,.82);--line:rgba(205,184,255,.22);--gold:#ffd88a;--pink:#ff9ecb;--violet:#b99cff;--mint:#a9f3dc;--text:#f8f2ff;--muted:#c9bfdc}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:Georgia,"Times New Roman",serif;background:radial-gradient(ellipse at 50% -15%,#49316f 0%,#17112f 38%,#090817 78%);min-height:100vh;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.55;background-image:radial-gradient(2px 2px at 10% 20%,#fff 50%,transparent 60%),radial-gradient(1px 1px at 70% 13%,#fff 50%,transparent 60%),radial-gradient(2px 2px at 85% 72%,#fff 50%,transparent 60%),radial-gradient(1px 1px at 28% 83%,#fff 50%,transparent 60%),radial-gradient(1px 1px at 52% 44%,#fff 50%,transparent 60%);background-size:290px 240px}
+button{font:inherit;cursor:pointer;color:inherit}.wrap{width:min(1100px,92vw);margin:auto;position:relative;z-index:1}.top{display:flex;justify-content:space-between;align-items:center;padding:22px 0;color:var(--muted);font:12px Arial,sans-serif;letter-spacing:2px;text-transform:uppercase}.pill{border:1px solid var(--line);padding:9px 13px;border-radius:99px;background:#ffffff09}
+.hero{text-align:center;padding:48px 12px 34px}.eyebrow{font:12px Arial,sans-serif;letter-spacing:5px;color:var(--gold);text-transform:uppercase}.hero h1{font-size:clamp(42px,8vw,86px);line-height:.98;margin:18px 0 12px;text-shadow:0 0 35px #b99cff66}.hero h1 span{color:var(--gold);font-style:italic}.hero p{max-width:620px;margin:0 auto;color:var(--muted);font-size:17px;line-height:1.6}.hero .start{margin-top:26px}
+.btn{border:1px solid #e7ceff66;background:linear-gradient(135deg,#8060c8,#503b91);padding:13px 21px;border-radius:999px;box-shadow:0 8px 25px #0005;transition:.2s}.btn:hover{transform:translateY(-2px);filter:brightness(1.13)}.btn.gold{background:linear-gradient(135deg,#ffe6a8,#c78d43);color:#281a28;border:0}.btn.ghost{background:#ffffff0b}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 26px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center}.stat strong{display:block;font-size:23px;color:var(--gold)}.stat small{font:10px Arial,sans-serif;letter-spacing:1.8px;color:var(--muted)}
+.mapbox{background:linear-gradient(145deg,#1b1740eF,#111027f2);border:1px solid var(--line);border-radius:25px;padding:22px;box-shadow:0 22px 60px #0006}.sectionhead{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:18px}.sectionhead h2{font-size:28px;margin:0}.sectionhead p{margin:6px 0 0;color:var(--muted);font-size:13px}.progress{height:7px;background:#ffffff12;border-radius:9px;overflow:hidden;margin:14px 0 20px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pink),var(--gold));transition:width .35s}
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.level{position:relative;min-height:128px;text-align:left;border:1px solid var(--line);border-radius:17px;padding:15px;background:linear-gradient(145deg,#ffffff10,#ffffff04);overflow:hidden;transition:.2s}.level:hover:not(:disabled){transform:translateY(-3px);border-color:#d5b9ff88}.level:disabled{opacity:.42;cursor:not-allowed;filter:saturate(.5)}.level.done{border-color:#f5d58b88;background:linear-gradient(145deg,#6e552e55,#ffffff05)}.level .num{font:10px Arial,sans-serif;letter-spacing:2px;color:var(--gold)}.level .emoji{font-size:27px;display:block;margin:8px 0}.level b{font-size:15px}.level small{display:block;color:var(--muted);font:11px Arial,sans-serif;margin-top:5px}.level .lock{position:absolute;right:13px;top:12px}
+.modal{position:fixed;inset:0;background:#05040bdc;display:none;align-items:center;justify-content:center;padding:16px;z-index:5;backdrop-filter:blur(9px)}.modal.show{display:flex}.dialog{width:min(620px,100%);max-height:90vh;overflow:auto;background:linear-gradient(150deg,#282052,#121027);border:1px solid #d4b8ff55;border-radius:25px;padding:25px;box-shadow:0 30px 90px #000b;position:relative}.close{position:absolute;right:15px;top:13px;border:1px solid var(--line);background:#ffffff10;border-radius:50%;width:35px;height:35px}.dialog .tag{font:10px Arial,sans-serif;letter-spacing:2px;color:var(--gold)}.dialog h2{font-size:32px;margin:10px 35px 8px 0}.dialog p{color:var(--muted);line-height:1.6}.challenge{background:#ffffff0a;border:1px solid var(--line);border-radius:17px;padding:17px;margin:18px 0}.answers{display:grid;gap:9px}.answer{background:#ffffff0b;border:1px solid var(--line);padding:12px;border-radius:12px;text-align:left}.answer:hover{border-color:var(--gold)}.answer.correct{border-color:var(--mint);background:#a9f3dc18}.answer.wrong{border-color:#ff8f9d;background:#ff8f9d15}.feedback{min-height:25px;color:var(--mint);font-size:14px;margin-top:12px}.hidden-item{font-size:28px;display:inline-grid;place-items:center;width:58px;height:58px;margin:5px;border:1px solid var(--line);background:#ffffff0b;border-radius:15px}.hidden-item:hover{background:#b99cff2b}.pathgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.path{padding:20px 8px;border:1px solid var(--line);border-radius:15px;background:#ffffff0b;text-align:center}.path span{display:block;font-size:25px;margin-bottom:8px}.stars{display:flex;flex-wrap:wrap;gap:8px}.star{font-size:28px;filter:drop-shadow(0 0 9px #ffd88a88)}.memorygrid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.memorygrid button{padding:15px;border-radius:12px;border:1px solid var(--line);background:#ffffff0b}.final{display:none;text-align:center;padding:34px 15px}.final.show{display:block}.final .chest{font-size:70px;filter:drop-shadow(0 0 25px #ffd88a88)}.final h2{font-size:clamp(32px,6vw,55px);color:var(--gold)}.final p{max-width:600px;margin:12px auto;color:var(--muted);line-height:1.8}.footer{text-align:center;color:#9c91b5;font:11px Arial,sans-serif;letter-spacing:1px;padding:25px 0 40px}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(80px);background:#f4d99b;color:#25182a;padding:12px 18px;border-radius:99px;font:13px Arial,sans-serif;z-index:9;transition:.3s;box-shadow:0 8px 25px #0008}.toast.show{transform:translateX(-50%) translateY(0)}
+
+.launch-screen{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(ellipse at 50% 20%,#49316f 0%,#17112f 48%,#090817 100%);text-align:center}
+.launch-card{width:min(560px,100%);padding:35px 22px;border:1px solid #d4b8ff55;border-radius:26px;background:linear-gradient(145deg,#282052ed,#121027ed);box-shadow:0 25px 90px #0009}
+.launch-icon{font-size:54px;filter:drop-shadow(0 0 20px #b99cffaa)}
+.launch-card h1{font-size:clamp(35px,8vw,62px);line-height:1;margin:16px 0 10px}
+.launch-card h1 span{color:var(--gold);font-style:italic}
+.launch-card p{color:var(--muted);line-height:1.65}
+.countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:25px 0}
+.time-unit{padding:14px 5px;border:1px solid var(--line);border-radius:15px;background:#ffffff0b}
+.time-unit strong{display:block;font: bold clamp(25px,6vw,38px) Arial,sans-serif;color:var(--gold);font-variant-numeric:tabular-nums}
+.time-unit small{font:10px Arial,sans-serif;letter-spacing:1.5px;color:var(--muted)}
+.launch-note{font:11px Arial,sans-serif;letter-spacing:1.5px;color:#d7c7ee!important;text-transform:uppercase}
+@media(max-width:380px){.countdown{gap:5px}.time-unit{padding:12px 2px}.time-unit small{font-size:8px}}
+
+@media(max-width:650px){.levels{grid-template-columns:repeat(2,1fr)}.level{min-height:120px}.mapbox{padding:15px}.sectionhead{align-items:start;flex-direction:column}.hero{padding-top:35px}.top{font-size:10px}.stats{gap:7px}.stat{padding:12px 5px}.stat strong{font-size:20px}}
+@media(max-width:360px){.levels{grid-template-columns:1fr 1fr}.level{padding:12px}.level b{font-size:13px}}
+</style>
+</head>
+<body>
+
+<div class="launch-screen" id="launchScreen">
+ <div class="launch-card">
+  <div class="launch-icon">🗝️✨</div>
+  <div class="eyebrow">A portal is waiting to open</div>
+  <h1>THE ANSHIKA<br><span>QUEST</span></h1>
+  <p>Eleven levels. Six magical worlds. One legendary explorer.<br>Your adventure begins when the clock strikes midnight.</p>
+  <div class="countdown" aria-label="Countdown to launch">
+   <div class="time-unit"><strong id="cdDays">00</strong><small>DAYS</small></div>
+   <div class="time-unit"><strong id="cdHours">00</strong><small>HOURS</small></div>
+   <div class="time-unit"><strong id="cdMinutes">00</strong><small>MINUTES</small></div>
+   <div class="time-unit"><strong id="cdSeconds">00</strong><small>SECONDS</small></div>
+  </div>
+  <p class="launch-note" id="launchStatus">UNLOCKS · 11 NOVEMBER 2026 · 12:00 AM IST</p>
+ </div>
+</div>
+
+<div class="wrap">
+  <header class="top"><span>✦ November is Hers ✦</span><span class="pill">DAY 11 · NOV 11</span></header>
+  <section class="hero">
+    <div class="eyebrow">A world made of wonder</div>
+    <h1>THE ANSHIKA<br><span>QUEST</span></h1>
+    <p>Eleven levels. Six magical worlds. One legendary explorer. Your adventure begins beyond the stars.</p>
+    <button class="btn gold start" onclick="document.getElementById('map').scrollIntoView({behavior:'smooth'})">ENTER THE QUEST ✦</button>
+  </section>
+  <div class="stats">
+    <div class="stat"><strong id="statLevels">0 / 11</strong><small>LEVELS CLEARED</small></div>
+    <div class="stat"><strong id="statStars">0 ✦</strong><small>STARS COLLECTED</small></div>
+    <div class="stat"><strong id="statBadges">0</strong><small>ACHIEVEMENTS</small></div>
+  </div>
+  <section class="mapbox" id="map">
+    <div class="sectionhead"><div><h2>✧ The World Map</h2><p>Clear a level to reveal the next part of the realm.</p></div><span class="pill" id="mapStatus">Portal sealed</span></div>
+    <div class="progress"><i id="progressBar"></i></div>
+    <div class="levels" id="levels"></div>
+  </section>
+  <section class="final" id="final">
+    <div class="chest">👑</div>
+    <div class="eyebrow">Quest complete · 11 of 11</div>
+    <h2>The world was brighter with you in it.</h2>
+    <p>Anshika, you made it through every puzzle, every little surprise and every corner of this tiny universe. The real treasure was never hidden in a chest — it was the person brave and curious enough to explore it.</p>
+    <p style="color:var(--gold)">You are officially the legend of this world. ✨</p>
+    <button class="btn gold" onclick="showSecret()">OPEN YOUR FINAL TREASURE 🎁</button>
+    <p id="secretMessage" style="display:none;color:#ffe3ae;font-size:19px">A little reminder: you deserve every beautiful thing this universe has to offer. Happy Day 11, Anshika. 💗</p>
+  </section>
+  <div class="footer">MADE OF STARDUST · POWERED BY ANSHIKA · PROJECT 11:11 IS A SEPARATE SURPRISE</div>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true">
+ <div class="dialog">
+  <button class="close" onclick="closeModal()" aria-label="Close">×</button>
+  <div class="tag" id="levelTag">LEVEL 01</div><h2 id="levelTitle">The Forgotten Portal</h2>
+  <p id="levelIntro"></p><div class="challenge" id="challenge"></div>
+  <div class="feedback" id="feedback" aria-live="polite"></div>
+  <div style="display:flex;justify-content:space-between;gap:10px;margin-top:15px"><button class="btn ghost" onclick="closeModal()">BACK TO MAP</button><button class="btn gold" id="continueBtn" style="display:none" onclick="completeLevel()">CLAIM STAR ✦</button></div>
+ </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const levels = [
+ {name:"The Forgotten Portal",emoji:"🌀",world:"The Mystic Woods",intro:"A glowing portal flickers awake. A message appears: “Eleven treasures are scattered across this realm. Only a curious heart can find them.”",type:"portal"},
+ {name:"The Treasure Hunt",emoji:"🗝️",world:"The Mystic Woods",intro:"Three tiny treasures are hiding in plain sight. Tap the one that carries a secret message.",type:"hunt"},
+ {name:"The Brain Test",emoji:"🧩",world:"The Rune Ruins",intro:"The ancient stones love a clever explorer. Solve these three quick riddles to open the rune gate.",type:"brain"},
+ {name:"The Garden of Little Things",emoji:"🌷",world:"The Blooming Kingdom",intro:"Every flower holds a little appreciation. Choose a bloom and uncover a note.",type:"garden"},
+ {name:"The Sound Chamber",emoji:"🎧",world:"The Echo Cavern",intro:"A purple-powered music challenge! Pick the correct answer to unlock the chamber.",type:"sound"},
+ {name:"The Choice of Paths",emoji:"🌈",world:"The Crossroads",intro:"Three paths, three different surprises. There is no wrong choice — choose the one that calls to you.",type:"paths"},
+ {name:"The Impossible Bridge",emoji:"🌉",world:"The Memory Mountains",intro:"The bridge is built from little details. Pick the answer that feels right to cross.",type:"memory"},
+ {name:"The Chaos Zone",emoji:"⚡",world:"The Glitch Galaxy",intro:"A little chaos has escaped! Catch the golden comet before it vanishes. Tap it five times.",type:"chaos"},
+ {name:"The Star Collector",emoji:"⭐",world:"The Celestial Sea",intro:"The sky has scattered eleven stars. Tap each star to gather enough light for the next destination.",type:"stars"},
+ {name:"The Final Lock",emoji:"🔐",world:"The Celestial Sea",intro:"One last lock stands between you and the secret destination. What number comes next: 2, 4, 8, 16, ...?",type:"lock"},
+ {name:"The Secret Destination",emoji:"🏰",world:"The Starlit Castle",intro:"You found the hidden castle. Open the final treasure and claim your title, Explorer of Anshika's Universe.",type:"destination"}
+];
+let cleared = new Set(), stars = 0, badges = 0, current = -1, huntFound=false, gardenFound=false, chaosCount=0, starCount=0, brainStep=0;
+const $=id=>document.getElementById(id);
+function renderMap(){
+ $('levels').innerHTML='';
+ levels.forEach((l,i)=>{
+  const b=document.createElement('button'); b.className='level'+(cleared.has(i)?' done':''); b.disabled=i>0&&!cleared.has(i-1);
+  b.innerHTML=`<span class="num">LEVEL ${String(i+1).padStart(2,'0')} · ${l.world}</span><span class="emoji">${l.emoji}</span><b>${l.name}</b><small>${cleared.has(i)?'✦ Completed':'Tap to explore'}</small>${i>0&&!cleared.has(i-1)?'<span class="lock">🔒</span>':''}`;
+  b.onclick=()=>openLevel(i); $('levels').appendChild(b);
+ });
+ $('statLevels').textContent=`${cleared.size} / 11`; $('statStars').textContent=`${stars} ✦`; $('statBadges').textContent=badges;
+ $('progressBar').style.width=(cleared.size/11*100)+'%';
+ $('mapStatus').textContent=cleared.size===11?'Realm restored ✨':cleared.size===0?'Portal sealed':`${cleared.size} levels explored`;
+ if(cleared.size===11){$('final').classList.add('show');}
+}
+function openLevel(i){
+ if(i>0&&!cleared.has(i-1))return; current=i; const l=levels[i];
+ $('levelTag').textContent=`LEVEL ${String(i+1).padStart(2,'0')} · ${l.world.toUpperCase()}`;$('levelTitle').textContent=l.name;$('levelIntro').textContent=l.intro;$('feedback').textContent='';$('continueBtn').style.display=cleared.has(i)?'none':'inline-block';$('challenge').innerHTML='';$('modal').classList.add('show');buildChallenge(l.type);
+}
+function closeModal(){$('modal').classList.remove('show')}
+function success(msg='A star has joined your collection! ✦'){
+ $('feedback').textContent=msg;$('continueBtn').style.display=cleared.has(current)?'none':'inline-block';
+}
+function chooseQuestion(question,answers,correct,after){
+ const box=$('challenge');box.innerHTML=`<strong>${question}</strong><div class="answers" id="answers"></div>`;
+ answers.forEach((a,i)=>{const b=document.createElement('button');b.className='answer';b.textContent=a;b.onclick=()=>{if(i===correct){b.classList.add('correct');[...$('answers').children].forEach(x=>x.disabled=true);after?after():success('Correct! The rune glows brighter. ✨')}else{b.classList.add('wrong');$('feedback').textContent='Not quite — give it another try!';setTimeout(()=>b.classList.remove('wrong'),500)}};$('answers').appendChild(b)});
+}
+function buildChallenge(type){
+ const c=$('challenge');
+ if(type==='portal'){c.innerHTML='<div style="text-align:center;font-size:50px">🗝️ ✨ 🌀</div><p style="text-align:center">The portal asks: Are you ready to begin?</p><div class="answers"><button class="answer" onclick="success(\'The portal recognises its explorer. Welcome, Anshika! ✨\')">I was born ready! ✨</button></div>'}
+ if(type==='hunt'){c.innerHTML='<strong>Find the secret treasure:</strong><p>Only one object contains a message.</p><div style="text-align:center"><button class="hidden-item" onclick="hunt(false)">🍄</button><button class="hidden-item" onclick="hunt(true)">💎</button><button class="hidden-item" onclick="hunt(false)">🪵</button><button class="hidden-item" onclick="hunt(false)">🍃</button><button class="hidden-item" onclick="hunt(false)">🪨</button></div><p id="huntMsg" style="text-align:center"></p>'}
+ if(type==='brain'){brainStep=0;brainQuestion()}
+ if(type==='garden'){c.innerHTML='<strong>Choose a flower to read its little note:</strong><div style="text-align:center;margin:14px"><button class="hidden-item" onclick="garden(0)">🌸</button><button class="hidden-item" onclick="garden(1)">🌼</button><button class="hidden-item" onclick="garden(2)">🌺</button></div><p id="gardenMsg" style="text-align:center"></p>'}
+ if(type==='sound'){chooseQuestion('Which of these is a music group?', ['BTS','NASA','NVIDIA'],0,()=>success('Purple confetti unlocked! Borahae! 💜'))}
+ if(type==='paths'){c.innerHTML='<div class="pathgrid"><button class="path" onclick="path(0)"><span>🌙</span>Moon Path</button><button class="path" onclick="path(1)"><span>🌸</span>Flower Path</button><button class="path" onclick="path(2)"><span>🌌</span>Galaxy Path</button></div><p id="pathMsg" style="text-align:center"></p>'}
+ if(type==='memory'){chooseQuestion('A little memory test: which one is the odd one out?', ['✨ Star','🌙 Moon','🍕 Pizza','🪐 Planet'],2,()=>success('Bridge restored, one glowing tile at a time!'))}
+ if(type==='chaos'){chaosCount=0;c.innerHTML='<p>Tap the golden comet five times. Ready?</p><div style="text-align:center"><button class="hidden-item" id="comet" style="width:100px;height:100px;font-size:48px" onclick="catchComet()">☄️</button><p id="chaosCount">0 / 5</p></div>'}
+ if(type==='stars'){starCount=0;c.innerHTML='<strong>Collect all eleven stars:</strong><div class="stars" id="starField"></div><p id="starCount">0 / 11 collected</p>';$('starField').innerHTML=Array.from({length:11},(_,i)=>`<button class="hidden-item" id="star${i}" onclick="collectStar(${i})">☆</button>`).join('')}
+ if(type==='lock'){chooseQuestion('What number comes next in the sequence: 2, 4, 8, 16, ...?', ['18','24','32','36'],2,()=>success('CLICK! The final lock opens. 🔓'))}
+ if(type==='destination'){c.innerHTML='<div style="font-size:55px;text-align:center">🏰 🔮 🎁</div><p style="text-align:center">The castle doors open only for the explorer who completed the journey.</p><div class="answers"><button class="answer" onclick="success(\'The castle welcomes its champion. Your treasure awaits beyond the map. 👑\')">I claim my final destination 👑</button></div>'}
+}
+function hunt(ok){$('huntMsg').textContent=ok?'Inside the crystal: “Your curiosity makes ordinary moments magical.” 💗':'No treasure here — keep searching!';if(ok)success('Secret compliment discovered! 💗')}
+function brainQuestion(){const qs=[['What has keys but cannot open locks?',['A piano','A map','A cloud'],0],['What gets wetter as it dries?',['A towel','The sun','A book'],0],['Which planet is known as the Red Planet?',['Venus','Mars','Jupiter'],1]];let q=qs[brainStep];chooseQuestion(q[0],q[1],q[2],()=>{brainStep++;if(brainStep===3)success('Three riddles solved! Brainy explorer badge earned. 🧠');else{ $('feedback').textContent='Nice! One more puzzle…';setTimeout(()=>{if($('modal').classList.contains('show'))brainQuestion()},650)}})}
+function garden(i){const notes=['You bring a little sparkle to the everyday.','Your kindness is a quiet kind of magic.','Never forget how much joy you add to the world.'];$('gardenMsg').textContent=notes[i];success('A little appreciation, freshly picked. 🌷')}
+function path(i){const msgs=['A moonlit note: keep dreaming bigger than the sky.','A flower note: the smallest joys can mean the most.','A galaxy note: your possibilities are endless.'];$('pathMsg').textContent=msgs[i];success('Path chosen. Surprise collected! ✨')}
+function catchComet(){chaosCount++;$('chaosCount').textContent=chaosCount+' / 5';$('comet').textContent=chaosCount>=5?'🌟':'☄️';if(chaosCount>=5)success('Chaos conquered. You are officially too quick! ⚡')}
+function collectStar(i){const b=$('star'+i);if(b.disabled)return;b.disabled=true;b.textContent='⭐';starCount++;$('starCount').textContent=starCount+' / 11 collected';if(starCount===11)success('Eleven stars gathered. The sky is yours! 🌠')}
+function completeLevel(){
+ if(cleared.has(current)){closeModal();return}
+ cleared.add(current);stars++;badges++;renderMap();closeModal();toast(`Level ${current+1} cleared! +1 star ✦`);
+}
+function showSecret(){$('secretMessage').style.display='block'}
+function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2200)}
+
+// The quest opens automatically at midnight at the start of 11 November 2026 (India time).
+const QUEST_LAUNCH = new Date('2026-11-11T00:00:00+05:30').getTime();
+function updateLaunchCountdown(){
+ const remaining = QUEST_LAUNCH - Date.now();
+ if(remaining <= 0){
+  $('launchScreen').style.display = 'none';
+  document.body.classList.add('quest-live');
+  return;
+ }
+ const days = Math.floor(remaining / 86400000);
+ const hours = Math.floor((remaining % 86400000) / 3600000);
+ const minutes = Math.floor((remaining % 3600000) / 60000);
+ const seconds = Math.floor((remaining % 60000) / 1000);
+ $('cdDays').textContent = String(days).padStart(2,'0');
+ $('cdHours').textContent = String(hours).padStart(2,'0');
+ $('cdMinutes').textContent = String(minutes).padStart(2,'0');
+ $('cdSeconds').textContent = String(seconds).padStart(2,'0');
+}
+updateLaunchCountdown();
+setInterval(updateLaunchCountdown, 1000);
+
+renderMap();
+</script>
+</body>
+</html>
